@@ -1,31 +1,46 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+<div id="app">
+    <!-- <Home v-if="visible"  /> -->
+    <!-- <Login @onSuccessfulLogin="onSuccessfulLogin" v-else /> -->
+    <Login v-if="!authenticated&&!metadata" @onSuccessfulLogin="onSuccessfulLogin"  />
+    <Loading v-if="authenticated&&!metadata" />
+    <Home v-if="authenticated&&metadata" /> 
+</div>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import { State, Getter, Action, Mutation, namespace } from "vuex-class";
+import { UtilsService } from "@/services/utils.service";
+import Home from "@/views/home/Home.vue";
+import Login from "@/views/home/Login.vue";
+import { UserLocal } from "@/models/entities";
+import { AppStorage } from "@/utils/app-storage";
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+@Component({
+  components: { Home, Login }
+})
+export default class App extends Vue {
+  @Action("pullMetadata") readonly pullMetadata;
+  @Getter("metadata") readonly metadata;
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+  utilsService: UtilsService;
+  authenticated;
+
+  created() {
+    this.utilsService = new UtilsService();
+    this.authenticated = false;
+
+    const user = AppStorage.getUser();
+    if (user){
+      this.authenticated = true;
+      this.pullMetadata(this.utilsService).then(data => {});
+    }
+  }
+
+  onSuccessfulLogin(utilsServiceLocal: UserLocal) {
+    this.authenticated = true;
+    this.pullMetadata(this.utilsService).then(data => {});
+  }
 }
-</style>
+</script>

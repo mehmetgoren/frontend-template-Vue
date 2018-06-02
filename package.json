@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --host 192.168.0.21 --port 51",
     "build": "vue-cli-service build"
   },
   "dependencies": {
@@ -11,7 +11,12 @@
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-class": "^0.3.1",
+    "vuetify": "^1.0.18",
+    "material-design-icons-iconfont": "^3.0.3",
+    "vue-chart-js": "^1.4.1",
+    "@aspnet/signalr": "^1.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-typescript": "^3.0.0-beta.15",
