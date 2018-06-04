@@ -37,7 +37,7 @@
 
      <v-dialog v-model="selected" v-if="selected" @keydown.esc="selected=null" :persistent="true" max-width="500px" >
       <v-card>
-        <DialogToolbar @onClose="selected=null" />
+        <DialogToolbar title="Edit Menu" @onClose="selected=null" />
         <v-card-text>
             <v-form ref="form" lazy-validation @keyup.native.enter="onSave" >
               <v-container fluid >

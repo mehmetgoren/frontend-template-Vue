@@ -1,6 +1,6 @@
 <template>
 <v-container fluid grid-list-md >
-    <Caption text="Server Infos (Powered by ASP.NET SignalR" />
+    <Caption text="Server Infos (Powered by Asp.Net Core SignalR)" />
 
         <v-card>
            <v-card-title>
@@ -93,7 +93,7 @@
 <script lang="ts">
 
 import { Component, Vue } from "vue-property-decorator";
-import { HubConnection } from '@aspnet/signalr';
+import  { HubConnection, HubConnectionBuilder }  from '@aspnet/signalr';
 import { AppStorage } from "@/utils/app-storage";
 import { UtilsService } from "@/services/utils.service";
 import { DataTableHeader, Vuetility } from "@/utils/vuetility";
@@ -106,10 +106,14 @@ export default class ServerDashBoardPage extends Vue {
     conn: HubConnection;
     created(){
         this.showProgress = true;
-        this.conn = new HubConnection(AppStorage.host + "/servermonitoring",);
+        this.conn = new HubConnectionBuilder()
+            .withUrl(AppStorage.host + "/servermonitoring")
+            .build();
         
         this.conn.on("notify", (data) => {
             this.info = data.info;
+
+            console.log(JSON.stringify(data.info));
 
             if (!this.cmCpu) this.cmCpu = data.cmCpu;
             if (!this.cmRam) this.cmRam = data.cmRam;

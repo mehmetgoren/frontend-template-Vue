@@ -89,13 +89,21 @@ export default class QueryLogPage extends Vue {
       this.preDefinedQueryList = [];
       this.preDefinedQueryList.push({ value: "select * from Log t where t.Code=313 order by t.Id desc", text: "Login" });
       this.preDefinedQueryList.push({ value: "select t.Method, count(*) from Log t where t.Code=1010 group by t.Method", text: "WebSocket Connection Numbers" });
+  }
+
+  resetDataTable(){
+      if (this.query){
+        this.queryList.length = 0;
+        this.headers.length = 0;
+        this.fields.length = 0;
+
+        return true;
+      }
+      return false;
   } 
   
   onExecuteQuery() {
-        if (this.query) {
-            this.queryList.length = 0;
-            this.headers.length = 0;
-            this.fields.length = 0;
+        if (this.resetDataTable()) {
             this.utilsService.queryLog(this.query)
                 .then(data => {
                     if (data && data.length && !Toolbox.isString(data)) { //>Toolbox.isString(data) resultasmessage
@@ -104,14 +112,16 @@ export default class QueryLogPage extends Vue {
                           this.headers.push({value:field, text:field});
                           this.fields.push(field);
                         }   
-                    }
+                    }else
+                        Toolbox.showWarning("The query returns no result.");
                 });
         } else {
-            Toolbox.showWarning("Please write a query");
+            Toolbox.showWarning("Please write a query.");
         }
   }
 
   onSearchReset(){
+       this.resetDataTable();
       (<any>this.$refs.formSearch).reset();
   }
 }

@@ -6,7 +6,7 @@
 <script lang="ts">
 
 import { Component, Vue } from "vue-property-decorator";
-import { HubConnection } from '@aspnet/signalr';
+import  { HubConnection, HubConnectionBuilder }  from '@aspnet/signalr';
 import { AppStorage } from "@/utils/app-storage";
 
 @Component
@@ -14,10 +14,13 @@ export default class SocketDemoPage extends Vue {
 
     image = null;
 
-    conn: HubConnection;
-    created(){
-        this.conn = new HubConnection(AppStorage.host + "/images",);
+     conn: HubConnection;
+     created(){
+         this.conn = new HubConnectionBuilder()
+            .withUrl(AppStorage.host + "/images")
+            .build();
         
+
         this.conn.on("notify", (data) => {
             this.image = 'data:image/png;base64,' + data;
         });
@@ -32,7 +35,7 @@ export default class SocketDemoPage extends Vue {
     async destroyed(){
         if (this.conn)
             await this.conn.stop();
-    }
+     }
 
 }
 </script>

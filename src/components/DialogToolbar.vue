@@ -29,7 +29,7 @@ export default class DialogToolbar extends Vue {
 
     @Prop({default:"edit"}) icon:string;
 
-    @Prop({default:"Edit User"}) title:string;
+    @Prop({default:"Edit"}) title:string;
 
     
     @Emit() 
