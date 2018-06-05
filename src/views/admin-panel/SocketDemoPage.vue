@@ -17,7 +17,7 @@ export default class SocketDemoPage extends Vue {
      conn: HubConnection;
      created(){
          this.conn = new HubConnectionBuilder()
-            .withUrl(AppStorage.host + "/images")
+            .withUrl(AppStorage.host + "/hubs/images?token=" + AppStorage.getUserIfNotAuthenticatedThenLogOut().Token)
             .build();
         
 

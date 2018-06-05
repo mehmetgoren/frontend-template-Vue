@@ -107,13 +107,11 @@ export default class ServerDashBoardPage extends Vue {
     created(){
         this.showProgress = true;
         this.conn = new HubConnectionBuilder()
-            .withUrl(AppStorage.host + "/servermonitoring")
+            .withUrl(AppStorage.host + "/hubs/servermonitoring?token=" + AppStorage.getUserIfNotAuthenticatedThenLogOut().Token)
             .build();
         
         this.conn.on("notify", (data) => {
             this.info = data.info;
-
-            console.log(JSON.stringify(data.info));
 
             if (!this.cmCpu) this.cmCpu = data.cmCpu;
             if (!this.cmRam) this.cmRam = data.cmRam;
